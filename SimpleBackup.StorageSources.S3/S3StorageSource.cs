@@ -20,10 +20,9 @@
             _service = new S3Service { AccessKeyID = _settings.AccessKey, SecretAccessKey = _settings.SecretAccessKey, UseSubdomains = true };
         }
 
-        public void ArchiveBackup(BackupDetails details, byte[] encryptedBytes)
+        public void ArchiveBackup(BackupDetails details, string inputFile)
         {
-            using (var streamReader = new MemoryStream(encryptedBytes))
-                _service.AddObject(streamReader, _settings.Bucket, GenerateFileName(details));
+			_service.AddObject(inputFile, _settings.Bucket, GenerateFileName(details));
         }
 
         public IEnumerable<BackupDetails> GetAll()

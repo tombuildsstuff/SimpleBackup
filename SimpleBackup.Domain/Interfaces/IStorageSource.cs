@@ -4,7 +4,7 @@ namespace SimpleBackup.Domain.Interfaces
 
     public interface IStorageSource
     {
-        void ArchiveBackup(BackupDetails details, byte[] encryptedBytes);
+        void ArchiveBackup(BackupDetails details, string fileName);
 
         IEnumerable<BackupDetails> GetAll();
 

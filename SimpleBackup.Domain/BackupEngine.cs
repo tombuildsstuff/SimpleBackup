@@ -13,7 +13,7 @@
         private readonly IDataCompressor _compressor;
         private readonly IEnumerable<IStorageSource> _storageSource;
 
-        public BackupEngine(IEnumerable<IBackupSource> backupSources, IDataCompressor compressor, IEnumerable<IStorageSource> storageSource)
+	    public BackupEngine(IEnumerable<IBackupSource> backupSources, IDataCompressor compressor, IEnumerable<IStorageSource> storageSource)
         {
             _backupSources = backupSources;
             _compressor = compressor;
@@ -45,14 +45,17 @@
                 backupSource.BackupIntoDirectory(backupDirectory);
             }
 
-            logger.Information("Compressing and Encrypting Archive..");
-            var encryptedBytes = _compressor.CompressData(directory, password);
+			var archive = Path.Combine(tempDirectory, string.Format("{0}.7z", DateTime.Now.Ticks)); // Path.GetTempFileName()
+            logger.Information(string.Format("Compressing and Encrypting Archive into {0}..", archive));
+			_compressor.CompressDataInToFile(directory, password, archive);
 
             foreach (var storageSource in _storageSource)
             {
                 logger.Information(string.Format("Uploading to {0}", storageSource.Name()));
-                storageSource.ArchiveBackup(details, encryptedBytes);
+				storageSource.ArchiveBackup(details, archive);
             }
+
+			File.Delete(archive);
 
             logger.Information("Completed Uploading Data");
             foreach (var storageSource in _storageSource)

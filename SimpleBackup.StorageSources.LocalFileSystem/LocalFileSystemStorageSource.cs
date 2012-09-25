@@ -17,10 +17,10 @@
             _settings = settings;
         }
 
-        public void ArchiveBackup(BackupDetails details, byte[] encryptedBytes)
+        public void ArchiveBackup(BackupDetails details, string fileName)
         {
             var path = Path.Combine(_settings.BackupDirectory, details.GenerateFileName());
-            File.WriteAllBytes(path, encryptedBytes);
+			File.Copy(fileName, path, true);
         }
 
         public IEnumerable<BackupDetails> GetAll()

@@ -9,7 +9,7 @@
 
     public class SqlServerDatabaseEngine : IDatabaseEngine
     {
-        private readonly string _connectionString;
+	    private readonly string _connectionString;
 
         public SqlServerDatabaseEngine(string server)
         {
@@ -18,10 +18,10 @@
 
         public SqlServerDatabaseEngine(string server, string user, string password)
         {
-            _connectionString = string.Format("Server={0};User ID={1};Password={2}", server, user, password);
+	        _connectionString = string.Format("Server={0};User ID={1};Password={2}", server, user, password);
         }
 
-        public string GetName()
+	    public string GetName()
         {
             return "Microsoft SQL Server";
         }
@@ -53,7 +53,7 @@
                 {
                     connection.Open();
                     command.ExecuteNonQuery();
-                }
+				}
             }
         }
 
