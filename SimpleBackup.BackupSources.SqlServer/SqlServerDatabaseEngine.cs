@@ -9,17 +9,20 @@
 
     public class SqlServerDatabaseEngine : IDatabaseEngine
     {
+	    private readonly int _backupTimeout;
 	    private readonly string _connectionString;
 
-        public SqlServerDatabaseEngine(string server)
+        public SqlServerDatabaseEngine(string server, int backupTimeout)
         {
-            _connectionString = string.Format("Server={0};Integrated Security=SSPI", server);
+	        _backupTimeout = backupTimeout;
+	        _connectionString = string.Format("Server={0};Integrated Security=SSPI", server);
         }
 
-        public SqlServerDatabaseEngine(string server, string user, string password)
-        {
-	        _connectionString = string.Format("Server={0};User ID={1};Password={2}", server, user, password);
-        }
+	    public SqlServerDatabaseEngine(string server, string user, string password, int backupTimeout)
+	    {
+		    _backupTimeout = backupTimeout;
+		    _connectionString = string.Format("Server={0};User ID={1};Password={2}", server, user, password);
+	    }
 
 	    public string GetName()
         {
@@ -51,6 +54,7 @@
             {
                 using (var command = new SqlCommand(string.Format("BACKUP DATABASE {0} TO DISK = '{1}' WITH FORMAT, MEDIANAME = '{0}', NAME = '{0}'", databaseName, fileName), connection))
                 {
+	                command.CommandTimeout = _backupTimeout;
                     connection.Open();
                     command.ExecuteNonQuery();
 				}
@@ -64,6 +68,7 @@
                 var sql = string.Format("RESTORE DATABASE {0} FROM DISK='{1}' WITH MOVE '{0}' TO '{2}\\{0}.mdf', MOVE '{0}_log' TO '{2}\\{0}_log.ldf', STATS=5", databaseName, filePath, restoreDirectory);
                 using (var command = new SqlCommand(sql, connection))
                 {
+					command.CommandTimeout = _backupTimeout;
                     connection.Open();
                     command.ExecuteNonQuery();
                 }

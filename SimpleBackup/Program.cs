@@ -94,8 +94,7 @@
 				kernel.Register(
 					Component.For<UserDefinedDirectory>().Instance(userDefinedDirectory).Named(userDefinedDirectory.FriendlyName));
 
-			kernel.Register(
-				Component.For<ISettingsProvider>().ImplementedBy<ConfigurationBasedSettingsProvider>().LifestyleTransient());
+			kernel.Register(Component.For<ISettingsProvider>().ImplementedBy<ConfigurationBasedSettingsProvider>().LifestyleTransient());
 			var settings = kernel.Resolve<ISettingsProvider>();
 			kernel.Register(Component.For<IDatabaseEngine>().Instance(ConfigureSQLServerEngine(settings)));
 			kernel.Register(Component.For<LocalStorageSourceSettings>().Instance(ConfigureLocalProvider(settings)));
@@ -142,24 +141,23 @@
 
 		private static IEnumerable<UserDefinedDirectory> GetAllUserDefinedDirectories()
 		{
-			return
-				((UserDefinedDirectoryConfiguration) ConfigurationManager.GetSection("userDefinedDirectories")).
-					DirectoryConfiguration;
+			return ((UserDefinedDirectoryConfiguration) ConfigurationManager.GetSection("userDefinedDirectories")).DirectoryConfiguration;
 		}
 
 		private static IDatabaseEngine ConfigureSQLServerEngine(ISettingsProvider settings)
 		{
 			var server = settings.Get(ISettingsProvider.SettingsType.SQLServer);
 			var authType = settings.Get(ISettingsProvider.SettingsType.SQLServerAuth);
+			var timeout = int.Parse(settings.Get(ISettingsProvider.SettingsType.SQLServerTimeout));
 			if (authType.Equals("SSPI", StringComparison.InvariantCultureIgnoreCase))
-				return new SqlServerDatabaseEngine(server);
+				return new SqlServerDatabaseEngine(server, timeout);
 
 			if (!authType.Equals("Credentials", StringComparison.InvariantCultureIgnoreCase))
 				throw new NotSupportedException("Unknown SQL Server Authentication Type");
 
 			var user = settings.Get(ISettingsProvider.SettingsType.SQLServerUser);
 			var pass = settings.Get(ISettingsProvider.SettingsType.SQLServerPass);
-			return new SqlServerDatabaseEngine(server, user, pass);
+			return new SqlServerDatabaseEngine(server, user, pass, timeout);
 		}
 
 		private static LocalStorageSourceSettings ConfigureLocalProvider(ISettingsProvider settings)

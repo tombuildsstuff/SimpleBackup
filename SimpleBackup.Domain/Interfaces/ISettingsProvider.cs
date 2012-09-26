@@ -64,7 +64,12 @@
             /// <summary>
             /// The password which should be used when connecting to SQL Server (only used when connecting via Credentials - see SQLServerAuth)
             /// </summary>
-            SQLServerPass,
+			SQLServerPass,
+
+			/// <summary>
+			/// The Timeout which should be used by Sql Server
+			/// </summary>
+			SQLServerTimeout,
             
             /// <summary>
             /// Temporary Directory used for Working Purposes
