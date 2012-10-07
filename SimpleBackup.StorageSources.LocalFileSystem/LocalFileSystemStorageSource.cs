@@ -25,7 +25,7 @@
 
         public IEnumerable<BackupDetails> GetAll()
         {
-            var files = Directory.EnumerateFiles(_settings.BackupDirectory, "*.zip");
+            var files = Directory.EnumerateFiles(_settings.BackupDirectory, "*.backup");
             return files.Select(f => BackupDetails.ParseFromBackupFile(f.Replace(_settings.BackupDirectory, string.Empty))).Where(f => f != null).OrderBy(f => f.BackupDate).ToList();
         }
 
@@ -40,7 +40,7 @@
 
         public IEnumerable<BackupDetails> RemoveOldBackups()
         {
-            var files = Directory.EnumerateFiles(_settings.BackupDirectory, "*.zip");
+            var files = Directory.EnumerateFiles(_settings.BackupDirectory, "*.backup");
             var details = files.Select(f => BackupDetails.ParseFromBackupFile(f.Replace(_settings.BackupDirectory, string.Empty))).Where(f => f != null).OrderBy(f => f.BackupDate).ToList();
             if (_settings.NumberOfBackupsToKeep >= details.Count)
                 return null;
