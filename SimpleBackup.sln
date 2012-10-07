@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBackup", "SimpleBackup\SimpleBackup.csproj", "{681F63A8-29C1-48A0-B086-D0D52A61397C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBackup.Domain", "SimpleBackup.Domain\SimpleBackup.Domain.csproj", "{427404F0-80BB-4934-89F7-2D3BE4197431}"
@@ -20,6 +20,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBackup.StorageSources.S3", "SimpleBackup.StorageSources.S3\SimpleBackup.StorageSources.S3.csproj", "{264DA7FD-5F72-4166-90FE-827256A7FF69}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBackup.Compressors.SevenZip", "SimpleBackup.Compressors.SevenZip\SimpleBackup.Compressors.SevenZip.csproj", "{6212A51D-0E03-4F19-A5B5-5D5355F2843B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E4F17DAD-6678-4227-AFF1-2962265FFEE9}"
+	ProjectSection(SolutionItems) = preProject
+		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

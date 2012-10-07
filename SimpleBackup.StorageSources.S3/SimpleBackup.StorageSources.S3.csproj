@@ -40,6 +40,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="CloudStorageSourceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="S3StorageSource.cs" />
