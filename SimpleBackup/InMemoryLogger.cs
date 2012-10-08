@@ -26,7 +26,7 @@ namespace SimpleBackup
 
         public void Information(string message)
         {
-            _log.Add(string.Format("Info: {0}", message));
+            _log.Add(string.Format("INFO: {0}", message));
         }
 
         public void ExportToFile(string file)
