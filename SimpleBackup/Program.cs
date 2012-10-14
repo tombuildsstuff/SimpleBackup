@@ -118,7 +118,7 @@
 		private static SmtpClient GetSmtpClient()
 		{
 			var client = new SmtpClient(ConfigurationManager.AppSettings["SmtpServer"],int.Parse(ConfigurationManager.AppSettings["SmtpPort"]));
-			client.UseDefaultCredentials = bool.Parse(ConfigurationManager.AppSettings["SmtpUseCredentials"]);
+			client.UseDefaultCredentials = bool.Parse(ConfigurationManager.AppSettings["SmtpUseDefaultCredentials"]);
 		    client.EnableSsl = bool.Parse(ConfigurationManager.AppSettings["SmtpUseSsl"]);
             
 			if (!client.UseDefaultCredentials)
