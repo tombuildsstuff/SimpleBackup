@@ -20,18 +20,18 @@
             _storageSource = storageSource;
         }
 
-        public void RunBackup(ILogger logger, string tempDirectory, string password)
+        public bool RunBackup(ILogger logger, string tempDirectory, string password)
         {
             if (_backupSources == null || !_backupSources.Any())
             {
                 logger.Error("No Backup Sources Found!");
-                return;
+                return false;
             }
 
             if (_storageSource == null || !_storageSource.Any())
             {
                 logger.Error("No Storage Sources Found!");
-                return;
+                return false;
             }
 
             var details = new BackupDetails { Name = "Full Backup", BackupDate = DateTime.Now };
@@ -76,6 +76,7 @@
             }
 
             Directory.Delete(tempDirectory, true);
+            return true;
         }
     }
 }

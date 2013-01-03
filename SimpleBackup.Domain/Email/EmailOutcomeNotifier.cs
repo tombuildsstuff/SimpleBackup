@@ -1,13 +1,14 @@
 ﻿namespace SimpleBackup.Domain.Email
 {
-	using System;
-	using System.IO;
-	using System.Linq;
-	using System.Text;
-	using System.Net.Mail;
-	using SimpleBackup.Domain.Interfaces;
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Net.Mail;
+    using System.Text;
 
-	public class EmailOutcomeNotifier : IOutcomeNotifier
+    using SimpleBackup.Domain.Interfaces;
+
+    public class EmailOutcomeNotifier : IOutcomeNotifier
 	{
 		private readonly EmailConfiguration _configuration;
 		private readonly SmtpClient _smtpClient;
@@ -28,7 +29,7 @@
 			}
 		}
 
-		public bool Send(string file)
+		public bool Send(string file, bool successful)
 		{
 			try
 			{
@@ -46,7 +47,7 @@
 				foreach (var line in lines)
 					outcome.AppendLine(line);
 
-				_smtpClient.Send(new MailMessage(_configuration.From, _configuration.To, _configuration.Subject, outcome.ToString()));
+                _smtpClient.Send(new MailMessage(_configuration.From, _configuration.To, _configuration.SuccessfulSubject, outcome.ToString()));
 				return true;
 			}
 			catch (Exception ex)

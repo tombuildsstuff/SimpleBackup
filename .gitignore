@@ -27,3 +27,4 @@ _ReSharper*/
 [Pp]ackages/*/
 *.ncrunchsolution
 *.stats
+*DotSettings*
