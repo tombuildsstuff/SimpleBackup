@@ -29,6 +29,7 @@
 			var engine = kernel.Resolve<BackupEngine>();
 			var logger = kernel.Resolve<ILogger>();
 			var outcomeNotifiers = kernel.ResolveAll<IOutcomeNotifier>();
+		    var successful = false;
 
 			try
 			{
@@ -46,7 +47,7 @@
 				Directory.CreateDirectory(tempDirectory);
 
 				logger.Information("Starting Backup");
-				engine.RunBackup(logger, tempDirectory, password);
+                successful = engine.RunBackup(logger, tempDirectory, password);
 			}
 			catch (Exception ex)
 			{
@@ -66,7 +67,7 @@
 			foreach (var outcomeNotifier in outcomeNotifiers)
 			{
 				Console.WriteLine("Sending log via {0}", outcomeNotifier.Name);
-				var outcome = outcomeNotifier.Send(logFileName);
+                var outcome = outcomeNotifier.Send(logFileName, successful);
 				Console.WriteLine("Sending {0}", outcome ? "Successful" : "Failed");
 			}
 		}
@@ -82,7 +83,7 @@
 			kernel.Register(Component.For<EmailConfiguration>().Instance(GetEmailConfiguration()).LifestyleTransient());
 			kernel.Register(Component.For<SmtpClient>().Instance(GetSmtpClient()).LifestyleTransient());
 
-			//kernel.Register(Component.For<IDataCompressor>().ImplementedBy<ZIPDataCompressor>());
+			//// kernel.Register(Component.For<IDataCompressor>().ImplementedBy<ZIPDataCompressor>());
 			kernel.Register(Component.For<IDataCompressor>().ImplementedBy<SevenZipDataCompressor>());
 			kernel.Register(Component.For<IStorageSource>().ImplementedBy<S3StorageSource>().LifestyleTransient());
 			kernel.Register(Component.For<IStorageSource>().ImplementedBy<LocalFileSystemStorageSource>().LifestyleTransient());
@@ -110,9 +111,10 @@
 		{
 			var from = ConfigurationManager.AppSettings["SmtpSenderEmailAddress"];
 			var fromAlias = ConfigurationManager.AppSettings["SmtpSenderEmailAlias"];
-			var subject = ConfigurationManager.AppSettings["SmtpSubject"];
-			var addresses = ConfigurationManager.AppSettings["SmtpToEmailAddresses"].Split(',');
-			return new EmailConfiguration(from, fromAlias, subject, addresses);
+			var successfulSubject = ConfigurationManager.AppSettings["SmtpSuccessfulSubject"];
+            var failureSubject = ConfigurationManager.AppSettings["SmtpFailureSubject"];
+            var addresses = ConfigurationManager.AppSettings["SmtpToEmailAddresses"].Split(',');
+            return new EmailConfiguration(from, fromAlias, successfulSubject, failureSubject, addresses);
 		}
 
 		private static SmtpClient GetSmtpClient()

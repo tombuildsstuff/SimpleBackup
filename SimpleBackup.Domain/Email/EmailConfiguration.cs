@@ -7,9 +7,20 @@ namespace SimpleBackup.Domain.Email
 		private readonly string _from;
 		private readonly string _fromAlias;
 
+        public EmailConfiguration(string from, string fromAlias, string successfulSubject, string failureSubject, params string[] addresses)
+        {
+            _from = @from;
+            _fromAlias = fromAlias;
+            SuccessfulSubject = successfulSubject;
+            FailureSubject = failureSubject;
+            SendToAddresses = addresses;
+        }
+
 		public IEnumerable<string> SendToAddresses { get; set; }
 
-		public string Subject { get; set; }
+        public string SuccessfulSubject { get; set; }
+
+        public string FailureSubject { get; set; }
 
 		public string To
 		{
@@ -25,14 +36,6 @@ namespace SimpleBackup.Domain.Email
 			{
 				return string.IsNullOrWhiteSpace(_fromAlias) ? _from : string.Format("{0} <{1}>", _fromAlias, _from);
 			}
-		}
-
-		public EmailConfiguration(string from, string fromAlias, string subject, params string[] addresses)
-		{
-			_from = @from;
-			_fromAlias = fromAlias;
-			SendToAddresses = addresses;
-			Subject = subject;
 		}
 	}
 }
