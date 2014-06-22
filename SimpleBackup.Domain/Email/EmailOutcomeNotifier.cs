@@ -37,6 +37,7 @@
 				
 				var numberOfErrors = lines.Count(l => l.StartsWith("ERROR"));
 				var numberOfWarnings = lines.Count(l => l.StartsWith("WARN"));
+                var subject = numberOfErrors > 0 || numberOfWarnings > 0 ? _configuration.FailureSubject : _configuration.SuccessfulSubject;
 
 				var outcome = new StringBuilder(string.Format("Backup Report for {0} at {1} ({2} errors & {3} warnings)",
 												DateTime.Now.ToLongDateString(),
@@ -47,7 +48,7 @@
 				foreach (var line in lines)
 					outcome.AppendLine(line);
 
-                _smtpClient.Send(new MailMessage(_configuration.From, _configuration.To, _configuration.SuccessfulSubject, outcome.ToString()));
+                _smtpClient.Send(new MailMessage(_configuration.From, _configuration.To, subject, outcome.ToString()));
 				return true;
 			}
 			catch (Exception ex)
