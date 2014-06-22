@@ -10,11 +10,14 @@
     using Castle.MicroKernel.Registration;
     using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 
+    using SimpleBackup.BackupSources.LocalFileSystem;
     using SimpleBackup.BackupSources.SqlServer;
     using SimpleBackup.Compressors.SevenZip;
     using SimpleBackup.Domain;
     using SimpleBackup.Domain.Databases;
     using SimpleBackup.Domain.Email;
+    using SimpleBackup.Domain.Email.Settings;
+    using SimpleBackup.Domain.Files;
     using SimpleBackup.Domain.Interfaces;
     using SimpleBackup.Domain.UserDefinedDirectories;
     using SimpleBackup.Infrastructure.Logging;
@@ -33,9 +36,9 @@
             RegisterCore(kernel);
 
             RegisterBackupSources(kernel);
-            RegisterDatabaseBackupProviders(kernel);
-            RegisterDatabaseRestoreProviders(kernel);
+            RegisterDatabaseProviders(kernel);
             RegisterLoggers(kernel);
+            RegisterUserDataProviders(kernel);
 
             RegisterLegacyJunk(kernel);
 
@@ -64,7 +67,7 @@
             kernel.Register(Component.For<IDataCompressor>().ImplementedBy<SevenZipDataCompressor>());
             kernel.Register(Component.For<IStorageSource>().ImplementedBy<S3StorageSource>().LifestyleTransient());
             kernel.Register(Component.For<IStorageSource>().ImplementedBy<LocalFileSystemStorageSource>().LifestyleTransient());
-            kernel.Register(Component.For<IOutcomeNotifier>().ImplementedBy<EmailOutcomeNotifier>().LifestyleTransient());
+            kernel.Register(Component.For<IGetNotifiedWhenABackupIsCompleted>().ImplementedBy<EmailNotifier>().LifestyleTransient());
 
             // register each of the components here
             foreach (var userDefinedDirectory in GetAllUserDefinedDirectories())
@@ -83,13 +86,15 @@
             kernel.Register(Component.For<ILogger>().ImplementedBy<MultiLogger>().LifestyleTransient());
         }
 
-        private static void RegisterDatabaseBackupProviders(IKernel kernel)
+        private static void RegisterDatabaseProviders(IKernel kernel)
         {
             kernel.Register(Component.For<IProvideDatabaseBackups>().ImplementedBy<SqlServerBackupSource>());
+            kernel.Register(Component.For<IHandleDatabaseRestores>().ImplementedBy<SqlServerRestoreSource>());
         }
 
-        private static void RegisterDatabaseRestoreProviders(IKernel kernel)
+        private static void RegisterUserDataProviders(IKernel kernel)
         {
+            kernel.Register(Component.For<IHandleBackingUpUserData>().ImplementedBy<LocalFileSystemBackupSource>());
         }
 
         private static SmtpClient GetSmtpClient()
@@ -114,7 +119,8 @@
 
         private static IEnumerable<UserDefinedDirectory> GetAllUserDefinedDirectories()
         {
-            return ((UserDefinedDirectoryConfiguration)ConfigurationManager.GetSection("userDefinedDirectories")).DirectoryConfiguration;
+            //return ((UserDefinedDirectoryConfiguration)ConfigurationManager.GetSection("userDefinedDirectories")).DirectoryConfiguration;
+            return null;
         }
 
         private static LocalStorageSourceSettings ConfigureLocalProvider(ISettingsProvider settings)

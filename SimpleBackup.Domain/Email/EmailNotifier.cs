@@ -6,16 +6,17 @@
     using System.Net.Mail;
     using System.Text;
 
+    using SimpleBackup.Domain.Email.Settings;
     using SimpleBackup.Domain.Interfaces;
 
-    public class EmailOutcomeNotifier : IOutcomeNotifier
+    public class EmailNotifier : IGetNotifiedWhenABackupIsCompleted
 	{
         private readonly IEmailSettings _settings;
 
         private readonly SmtpClient _smtpClient;
 		private readonly ILogger _logger;
 
-		public EmailOutcomeNotifier(IEmailSettings settings, SmtpClient smtpClient, ILogger logger)
+		public EmailNotifier(IEmailSettings settings, SmtpClient smtpClient, ILogger logger)
 		{
 		    _settings = settings;
 		    _smtpClient = smtpClient;
@@ -38,7 +39,7 @@
 				
 				var numberOfErrors = lines.Count(l => l.Contains("ERROR"));
 				var numberOfWarnings = lines.Count(l => l.Contains("WARN"));
-                var subject = numberOfErrors > 0 || numberOfWarnings > 0 ? _settings.FailureSubject : _settings.SuccessfulSubject;
+                var subject = numberOfErrors > 0 || numberOfWarnings > 0 || !successful ? _settings.FailureSubject : _settings.SuccessfulSubject;
 
 				var outcome = new StringBuilder(string.Format("Backup Report for {0} at {1} ({2} errors & {3} warnings)",
 												DateTime.Now.ToLongDateString(),

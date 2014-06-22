@@ -1,4 +1,4 @@
-﻿namespace SimpleBackup.Domain.Email
+﻿namespace SimpleBackup.Domain.Email.Settings
 {
     using System.Collections.Generic;
     using System.Configuration;

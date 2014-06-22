@@ -1,10 +1,11 @@
-﻿namespace SimpleBackup.Domain.UserDefinedDirectories
+﻿namespace SimpleBackup.BackupSources.LocalFileSystem.ConfigurationSections
 {
-    using System;
     using System.Configuration;
     using System.Linq;
     using System.Xml;
     using System.Xml.Linq;
+
+    using SimpleBackup.Domain.UserDefinedDirectories;
 
     public class UserDefinedDirectoriesConfigurationSectionHandler : IConfigurationSectionHandler
     {

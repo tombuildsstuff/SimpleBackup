@@ -66,8 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SimpleBackup.BackupSources.LocalFileSystem\SimpleBackup.BackupSources.LocalFileSystem.csproj">
+      <Project>{15fe4102-9513-48b7-a3fc-3fcd36c56461}</Project>
+      <Name>SimpleBackup.BackupSources.LocalFileSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SimpleBackup.BackupSources.SqlServer\SimpleBackup.BackupSources.SqlServer.csproj">
-      <Project>{146E30EF-C766-4E50-B200-40A0732D6EF8}</Project>
+      <Project>{146e30ef-c766-4e50-b200-40a0732d6ef8}</Project>
       <Name>SimpleBackup.BackupSources.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimpleBackup.Compressors.SevenZip\SimpleBackup.Compressors.SevenZip.csproj">

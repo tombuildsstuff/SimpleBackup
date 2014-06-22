@@ -11,14 +11,14 @@
     {
         private readonly BackupEngine _engine;
         private readonly ILogger _logger;
-        private readonly IList<IOutcomeNotifier> _outcome;
+        private readonly IList<IGetNotifiedWhenABackupIsCompleted> _notifySources;
         private readonly ISettingsProvider _settings;
 
-        public ConsoleBackupRunner(BackupEngine engine, ILogger logger, IList<IOutcomeNotifier> outcome, ISettingsProvider settings)
+        public ConsoleBackupRunner(BackupEngine engine, ILogger logger, IList<IGetNotifiedWhenABackupIsCompleted> notifySources, ISettingsProvider settings)
         {
             _engine = engine;
             _logger = logger;
-            _outcome = outcome;
+            _notifySources = notifySources;
             _settings = settings;
         }
 
@@ -58,7 +58,7 @@
                 DateTime.Now.Second);
             _logger.ExportToFile(logFileName);
 
-            foreach (var outcomeNotifier in _outcome)
+            foreach (var outcomeNotifier in _notifySources)
             {
                 Console.WriteLine("Sending log via {0}", outcomeNotifier.Name);
                 var outcome = outcomeNotifier.Send(logFileName, successful);

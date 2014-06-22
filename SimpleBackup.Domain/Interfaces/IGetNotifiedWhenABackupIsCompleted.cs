@@ -1,6 +1,6 @@
 ﻿namespace SimpleBackup.Domain.Interfaces
 {
-	public interface IOutcomeNotifier
+	public interface IGetNotifiedWhenABackupIsCompleted
 	{
 		string Name { get; }
 
