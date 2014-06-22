@@ -48,7 +48,7 @@
     <Compile Include="Email\Settings\EmailSettings.cs" />
     <Compile Include="Email\Settings\IEmailSettings.cs" />
     <Compile Include="Interfaces\IBackupSource.cs" />
-    <Compile Include="Interfaces\IDataCompressor.cs" />
+    <Compile Include="Interfaces\ICompressData.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\IGetNotifiedWhenABackupIsCompleted.cs" />
     <Compile Include="Interfaces\ISettingsProvider.cs" />

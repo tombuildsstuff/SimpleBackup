@@ -10,10 +10,10 @@
     public class BackupEngine
     {
         private readonly IEnumerable<IBackupSource> _backupSources;
-        private readonly IDataCompressor _compressor;
+        private readonly ICompressData _compressor;
         private readonly IEnumerable<IStorageSource> _storageSource;
 
-	    public BackupEngine(IEnumerable<IBackupSource> backupSources, IDataCompressor compressor, IEnumerable<IStorageSource> storageSource)
+	    public BackupEngine(IEnumerable<IBackupSource> backupSources, ICompressData compressor, IEnumerable<IStorageSource> storageSource)
         {
             _backupSources = backupSources;
             _compressor = compressor;

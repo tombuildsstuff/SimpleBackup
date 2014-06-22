@@ -11,6 +11,7 @@
     using SimpleBackup.BackupSources.LocalFileSystem;
     using SimpleBackup.BackupSources.SqlServer;
     using SimpleBackup.Compressors.SevenZip;
+    using SimpleBackup.Compressors.SevenZip.Settings;
     using SimpleBackup.Domain;
     using SimpleBackup.Domain.Databases;
     using SimpleBackup.Domain.Email;
@@ -30,11 +31,11 @@
             var kernel = new DefaultKernel();
             kernel.Resolver.AddSubResolver(new CollectionResolver(kernel, true));
 
-            RegisterCore(kernel);
-
             RegisterBackupSources(kernel);
+            RegisterCore(kernel);
             RegisterDatabaseProviders(kernel);
             RegisterLoggers(kernel);
+            RegisterSevenZip(kernel);
             RegisterUserDataProviders(kernel);
 
             RegisterLegacyJunk(kernel);
@@ -57,11 +58,9 @@
         private static void RegisterLegacyJunk(IKernel kernel)
         {
             // Legacy to clean..
-            kernel.Register(Component.For<SevenZipConfiguration>().Instance(GetSevenZipConfiguration()).LifestyleTransient());
             kernel.Register(Component.For<IEmailSettings>().ImplementedBy<EmailSettings>().LifestyleTransient());
             kernel.Register(Component.For<SmtpClient>().Instance(GetSmtpClient()).LifestyleTransient());
 
-            kernel.Register(Component.For<IDataCompressor>().ImplementedBy<SevenZipDataCompressor>());
             kernel.Register(Component.For<IStorageSource>().ImplementedBy<S3StorageSource>().LifestyleTransient());
             kernel.Register(Component.For<IStorageSource>().ImplementedBy<LocalFileSystemStorageSource>().LifestyleTransient());
             kernel.Register(Component.For<IGetNotifiedWhenABackupIsCompleted>().ImplementedBy<EmailNotifier>().LifestyleTransient());
@@ -85,6 +84,12 @@
             kernel.Register(Component.For<IHandleDatabaseRestores>().ImplementedBy<SqlServerRestoreSource>());
         }
 
+        private static void RegisterSevenZip(IKernel kernel)
+        {
+            kernel.Register(Component.For<ICompressData>().ImplementedBy<SevenZipDataCompressor>().LifestyleTransient());
+            kernel.Register(Component.For<ISevenZipSettings>().ImplementedBy<SevenZipSettings>().LifestyleTransient());
+        }
+
         private static void RegisterUserDataProviders(IKernel kernel)
         {
             kernel.Register(Component.For<IBackupFiles>().ImplementedBy<LocalFileSystemBackupSource>());
@@ -103,11 +108,6 @@
             }
 
             return client;
-        }
-
-        private static SevenZipConfiguration GetSevenZipConfiguration()
-        {
-            return new SevenZipConfiguration(ConfigurationManager.AppSettings["SevenZipInstallationDirectory"]);
         }
 
         private static LocalStorageSourceSettings ConfigureLocalProvider(ISettingsProvider settings)

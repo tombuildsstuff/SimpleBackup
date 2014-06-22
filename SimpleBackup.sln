@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3B1DE2
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBackup.Compressors.SharpZipLib", "SimpleBackup.Compressors.SharpZipLib\SimpleBackup.Compressors.SharpZipLib.csproj", "{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBackup.StorageSources.S3", "SimpleBackup.StorageSources.S3\SimpleBackup.StorageSources.S3.csproj", "{264DA7FD-5F72-4166-90FE-827256A7FF69}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBackup.Compressors.SevenZip", "SimpleBackup.Compressors.SevenZip\SimpleBackup.Compressors.SevenZip.csproj", "{6212A51D-0E03-4F19-A5B5-5D5355F2843B}"
@@ -78,16 +76,6 @@ Global
 		{217C52A2-4648-499D-8405-C2DBB10EF942}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{217C52A2-4648-499D-8405-C2DBB10EF942}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{217C52A2-4648-499D-8405-C2DBB10EF942}.Release|x86.ActiveCfg = Release|Any CPU
-		{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}.Release|x86.ActiveCfg = Release|Any CPU
 		{264DA7FD-5F72-4166-90FE-827256A7FF69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{264DA7FD-5F72-4166-90FE-827256A7FF69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{264DA7FD-5F72-4166-90FE-827256A7FF69}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

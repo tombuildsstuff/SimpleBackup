@@ -1,6 +1,6 @@
 namespace SimpleBackup.Domain.Interfaces
 {
-    public interface IDataCompressor
+    public interface ICompressData
     {
 	    void CompressDataInToFile(string directory, string password, string outputFile);
     }

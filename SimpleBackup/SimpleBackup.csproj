@@ -78,10 +78,6 @@
       <Project>{6212A51D-0E03-4F19-A5B5-5D5355F2843B}</Project>
       <Name>SimpleBackup.Compressors.SevenZip</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SimpleBackup.Compressors.SharpZipLib\SimpleBackup.Compressors.SharpZipLib.csproj">
-      <Project>{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}</Project>
-      <Name>SimpleBackup.Compressors.SharpZipLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SimpleBackup.Domain\SimpleBackup.Domain.csproj">
       <Project>{427404F0-80BB-4934-89F7-2D3BE4197431}</Project>
       <Name>SimpleBackup.Domain</Name>

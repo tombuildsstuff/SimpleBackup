@@ -6,11 +6,11 @@
 
 	using SimpleBackup.Domain.Interfaces;
 
-	public class ZIPDataCompressor : IDataCompressor
+	public class ZipCompressData : ICompressData
 	{
 		private readonly ILogger _logger;
 
-		public ZIPDataCompressor(ILogger logger)
+		public ZipCompressData(ILogger logger)
 		{
 			_logger = logger;
 		}
