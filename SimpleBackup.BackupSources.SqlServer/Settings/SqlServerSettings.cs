@@ -24,7 +24,7 @@
             {
                 bool value;
 
-                if (bool.TryParse(ConfigurationManager.AppSettings["SqlServer.BackupEnabled"], out value))
+                if (bool.TryParse(ConfigurationManager.AppSettings["SqlServer.BackupsEnabled"], out value))
                     return value;
 
                 return false;
