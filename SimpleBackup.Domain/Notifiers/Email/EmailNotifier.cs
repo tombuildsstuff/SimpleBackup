@@ -34,9 +34,9 @@
 			{
                 var subject = successful ? _settings.SuccessfulSubject : _settings.FailureSubject;
                 var from = string.IsNullOrWhiteSpace(_settings.FromAlias) ? _settings.FromAddress : string.Format("{0} <{1}>", _settings.FromAlias, _settings.FromAddress);
-			    var to = string.Join(";", _settings.ToAddresses);
+			    var to = string.Join(",", _settings.ToAddresses);
 			    var client = _smtpProvider.Get();
-                client.Send(new MailMessage(from, to, subject, null));
+                client.Send(new MailMessage(from, to, subject, subject));
 				return true;
 			}
 			catch (Exception ex)
