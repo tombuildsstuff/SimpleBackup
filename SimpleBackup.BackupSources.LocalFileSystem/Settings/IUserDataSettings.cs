@@ -2,12 +2,12 @@
 {
     using System.Collections.Generic;
 
-    using SimpleBackup.Domain.UserDefinedDirectories;
+    using SimpleBackup.BackupSources.LocalFileSystem.Entities;
 
     public interface IUserDataSettings
     {
         bool BackupsEnabled { get; }
 
-        IList<UserDefinedDirectory> DirectoriesToBackup { get; }
+        IEnumerable<UserDataDirectory> DirectoriesToBackup { get; }
     }
 }

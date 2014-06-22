@@ -1,7 +1,5 @@
 ﻿namespace SimpleBackup.Infrastructure.DI
 {
-    using System;
-    using System.Collections.Generic;
     using System.Configuration;
     using System.Net;
     using System.Net.Mail;
@@ -19,7 +17,6 @@
     using SimpleBackup.Domain.Email.Settings;
     using SimpleBackup.Domain.Files;
     using SimpleBackup.Domain.Interfaces;
-    using SimpleBackup.Domain.UserDefinedDirectories;
     using SimpleBackup.Infrastructure.Logging;
     using SimpleBackup.Infrastructure.Runner;
     using SimpleBackup.Infrastructure.Settings;
@@ -53,8 +50,8 @@
 
         private static void RegisterBackupSources(IKernel kernel)
         {
-            var assemblies = AllTypes.FromAssemblyInDirectory(new AssemblyFilter(AppDomain.CurrentDomain.BaseDirectory));
-            kernel.Register(assemblies.BasedOn<IBackupSource>().LifestyleTransient().WithService.FromInterface());
+            kernel.Register(Component.For<IBackupSource>().ImplementedBy<DatabasesBackupSource>().LifestyleTransient());
+            kernel.Register(Component.For<IBackupSource>().ImplementedBy<FilesBackupSource>().LifestyleTransient());
         }
 
         private static void RegisterLegacyJunk(IKernel kernel)
@@ -68,10 +65,6 @@
             kernel.Register(Component.For<IStorageSource>().ImplementedBy<S3StorageSource>().LifestyleTransient());
             kernel.Register(Component.For<IStorageSource>().ImplementedBy<LocalFileSystemStorageSource>().LifestyleTransient());
             kernel.Register(Component.For<IGetNotifiedWhenABackupIsCompleted>().ImplementedBy<EmailNotifier>().LifestyleTransient());
-
-            // register each of the components here
-            foreach (var userDefinedDirectory in GetAllUserDefinedDirectories())
-                kernel.Register(Component.For<UserDefinedDirectory>().Instance(userDefinedDirectory).Named(userDefinedDirectory.FriendlyName));
 
             kernel.Register(Component.For<ISettingsProvider>().ImplementedBy<ConfigurationBasedSettingsProvider>().LifestyleTransient());
             var settings = kernel.Resolve<ISettingsProvider>();
@@ -94,7 +87,7 @@
 
         private static void RegisterUserDataProviders(IKernel kernel)
         {
-            kernel.Register(Component.For<IHandleBackingUpUserData>().ImplementedBy<LocalFileSystemBackupSource>());
+            kernel.Register(Component.For<IBackupFiles>().ImplementedBy<LocalFileSystemBackupSource>());
         }
 
         private static SmtpClient GetSmtpClient()
@@ -115,12 +108,6 @@
         private static SevenZipConfiguration GetSevenZipConfiguration()
         {
             return new SevenZipConfiguration(ConfigurationManager.AppSettings["SevenZipInstallationDirectory"]);
-        }
-
-        private static IEnumerable<UserDefinedDirectory> GetAllUserDefinedDirectories()
-        {
-            //return ((UserDefinedDirectoryConfiguration)ConfigurationManager.GetSection("userDefinedDirectories")).DirectoryConfiguration;
-            return null;
         }
 
         private static LocalStorageSourceSettings ConfigureLocalProvider(ISettingsProvider settings)

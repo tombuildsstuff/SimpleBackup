@@ -8,27 +8,42 @@
     using SimpleBackup.BackupSources.SqlServer.Constants;
     using SimpleBackup.BackupSources.SqlServer.Settings;
     using SimpleBackup.Domain.Databases;
+    using SimpleBackup.Domain.Interfaces;
 
     public class SqlServerBackupSource : IProvideDatabaseBackups
     {
         private readonly ISqlServerSettings _settings;
+        private readonly ILogger _logger;
 
-        public SqlServerBackupSource(ISqlServerSettings settings)
+        public SqlServerBackupSource(ISqlServerSettings settings, ILogger logger)
         {
             _settings = settings;
+            _logger = logger;
         }
 
-        public void BackupDatabaseToFile(string databaseName, string fileName)
+        public bool BackupDatabaseToFile(string databaseName, string fileName)
         {
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            _logger.Information(string.Format("Backing up Database '{0}' into '{1}'", databaseName, fileName));
+            try
             {
-                using (var command = new SqlCommand(string.Format("BACKUP DATABASE {0} TO DISK = '{1}' WITH FORMAT, MEDIANAME = '{0}', NAME = '{0}'", databaseName, fileName), connection))
+                using (var connection = new SqlConnection(_settings.ConnectionString))
                 {
-                    command.CommandTimeout = _settings.Timeout;
-                    connection.Open();
-                    command.ExecuteNonQuery();
+                    using (var command = new SqlCommand(string.Format("BACKUP DATABASE {0} TO DISK = '{1}' WITH FORMAT, MEDIANAME = '{0}', NAME = '{0}'", databaseName, fileName), connection))
+                    {
+                        command.CommandTimeout = _settings.Timeout;
+                        connection.Open();
+                        command.ExecuteNonQuery();
+
+                        return true;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.ToString());
+            }
+
+            return false;
         }
 
         public IEnumerable<string> DatabaseNames
@@ -61,7 +76,7 @@
             }
         }
 
-        public string GetName
+        public string Name
         {
             get
             {

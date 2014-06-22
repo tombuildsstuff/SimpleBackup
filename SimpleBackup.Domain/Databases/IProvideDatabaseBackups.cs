@@ -4,12 +4,12 @@
 
     public interface IProvideDatabaseBackups
     {
-        void BackupDatabaseToFile(string databaseName, string fileName);
+        bool BackupDatabaseToFile(string databaseName, string fileName);
 
         IEnumerable<string> DatabaseNames { get; }
 
         bool Enabled { get; }
 
-        string GetName { get; }
+        string Name { get; }
     }
 }

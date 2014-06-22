@@ -9,7 +9,7 @@
     using SimpleBackup.Domain.Files;
     using SimpleBackup.Domain.Interfaces;
 
-    public class LocalFileSystemBackupSource : IHandleBackingUpUserData
+    public class LocalFileSystemBackupSource : IBackupFiles
     {
         private readonly IUserDataSettings _settings;
         private readonly ILogger _logger;
@@ -20,7 +20,7 @@
             _logger = logger;
         }
 
-        public bool BackupEnabled
+        public bool Enabled
         {
             get
             {

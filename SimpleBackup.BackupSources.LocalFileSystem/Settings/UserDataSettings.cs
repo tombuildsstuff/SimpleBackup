@@ -4,7 +4,7 @@
     using System.Configuration;
 
     using SimpleBackup.BackupSources.LocalFileSystem.ConfigurationSections;
-    using SimpleBackup.Domain.UserDefinedDirectories;
+    using SimpleBackup.BackupSources.LocalFileSystem.Entities;
 
     public class UserDataSettings : IUserDataSettings
     {
@@ -21,15 +21,19 @@
             }
         }
 
-        public IList<UserDefinedDirectory> DirectoriesToBackup
+        public IEnumerable<UserDataDirectory> DirectoriesToBackup
         {
             get
             {
-                var section = ConfigurationManager.GetSection("userDefinedDirectories");
+                var section = ConfigurationManager.GetSection("userDataDirectories");
                 if (section != null)
-                    return ((UserDefinedDirectoryConfiguration)section).DirectoryConfiguration;
+                {
+                    var config = section as UserDataDirectoriesConfiguration;
+                    if (config != null)
+                        return config.Directories;
+                }
 
-                return new List<UserDefinedDirectory>();
+                return new List<UserDataDirectory>();
             }
         }
     }

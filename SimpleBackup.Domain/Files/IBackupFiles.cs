@@ -1,8 +1,8 @@
 ﻿namespace SimpleBackup.Domain.Files
 {
-    public interface IHandleBackingUpUserData
+    public interface IBackupFiles
     {
-        bool BackupEnabled { get; }
+        bool Enabled { get; }
 
         bool BackupIntoDirectory(string directory);
 

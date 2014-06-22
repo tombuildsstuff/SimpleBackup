@@ -1,12 +1,12 @@
-namespace SimpleBackup.Domain.UserDefinedDirectories
+﻿namespace SimpleBackup.BackupSources.LocalFileSystem.Entities
 {
-    public class UserDefinedDirectory
+    public class UserDataDirectory
     {
         public string FriendlyName { get; set; }
 
         public string Path { get; set; }
 
-        public UserDefinedDirectory(string friendlyName, string path)
+        public UserDataDirectory(string friendlyName, string path)
         {
             FriendlyName = friendlyName;
             Path = path;

@@ -1,6 +1,6 @@
 ﻿namespace SimpleBackup.Domain.Files
 {
-    public interface IHandleRestoringUserData
+    public interface IHandleRestoringFiles
     {
     }
 }
