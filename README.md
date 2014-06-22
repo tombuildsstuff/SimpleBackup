@@ -15,3 +15,9 @@ Simple Backup is a .net 4 application.
 *  Build It (msbuild)
 *  Deploy the 'bin' contents -> some folder
 *  Put your own settings in 'SimpleBackup.config.exe'
+
+or [download the precompiled version](https://s3-eu-west-1.amazonaws.com/ibuildstuff/software/simple-backup-2.0.zip)
+
+Licence
+--------
+MIT
