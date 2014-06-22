@@ -7,8 +7,8 @@
 
     using SimpleBackup.BackupSources.SqlServer.Constants;
     using SimpleBackup.BackupSources.SqlServer.Settings;
-    using SimpleBackup.Domain.Databases;
-    using SimpleBackup.Domain.Interfaces;
+    using SimpleBackup.Domain.Logging;
+    using SimpleBackup.Domain.Sources.Databases;
 
     public class SqlServerBackupSource : IProvideDatabaseBackups
     {

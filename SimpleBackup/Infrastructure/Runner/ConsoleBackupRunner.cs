@@ -4,17 +4,19 @@
     using System.Collections.Generic;
     using System.IO;
 
-    using SimpleBackup.Domain;
-    using SimpleBackup.Domain.Interfaces;
+    using SimpleBackup.Domain.Engine;
+    using SimpleBackup.Domain.Engine.Settings;
+    using SimpleBackup.Domain.Logging;
+    using SimpleBackup.Domain.Notifiers;
 
     public class ConsoleBackupRunner : IConsoleBackupRunner
     {
-        private readonly BackupEngine _engine;
+        private readonly IBackupEngine _engine;
         private readonly ILogger _logger;
         private readonly IList<IGetNotifiedWhenABackupIsCompleted> _notifySources;
-        private readonly ISettingsProvider _settings;
+        private readonly IBackupEngineSettings _settings;
 
-        public ConsoleBackupRunner(BackupEngine engine, ILogger logger, IList<IGetNotifiedWhenABackupIsCompleted> notifySources, ISettingsProvider settings)
+        public ConsoleBackupRunner(IBackupEngine engine, ILogger logger, IList<IGetNotifiedWhenABackupIsCompleted> notifySources, IBackupEngineSettings settings)
         {
             _engine = engine;
             _logger = logger;
@@ -28,8 +30,7 @@
 
             try
             {
-                var tempDirectory = _settings.Get(ISettingsProvider.SettingsType.TempDirectory);
-                var password = _settings.Get(ISettingsProvider.SettingsType.Password);
+                var tempDirectory = _settings.TempDirectory;
 
                 if (Directory.Exists(tempDirectory))
                 {
@@ -41,7 +42,7 @@
                 Directory.CreateDirectory(tempDirectory);
 
                 _logger.Information("Starting Backup");
-                successful = _engine.RunBackup(_logger, tempDirectory, password);
+                successful = _engine.RunBackup();
             }
             catch (Exception ex)
             {

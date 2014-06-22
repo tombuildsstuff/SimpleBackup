@@ -11,7 +11,7 @@
             {
                 SqlServerAuthType value;
 
-                if (Enum.TryParse(ConfigurationManager.AppSettings["SqlServer.BackupEnabled"], true, out value))
+                if (Enum.TryParse(ConfigurationManager.AppSettings["SqlServer.Authentication"], true, out value))
                     return value;
 
                 return SqlServerAuthType.Unknown;
@@ -74,7 +74,7 @@
                 if (int.TryParse(ConfigurationManager.AppSettings["SqlServer.Timeout"], out value))
                     return value;
 
-                return 300;
+                return 30000;
             }
         }
 

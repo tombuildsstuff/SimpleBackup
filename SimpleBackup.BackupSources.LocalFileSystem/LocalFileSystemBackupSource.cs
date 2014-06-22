@@ -6,8 +6,8 @@
 
     using SimpleBackup.BackupSources.LocalFileSystem.Constants;
     using SimpleBackup.BackupSources.LocalFileSystem.Settings;
-    using SimpleBackup.Domain.Files;
-    using SimpleBackup.Domain.Interfaces;
+    using SimpleBackup.Domain.Logging;
+    using SimpleBackup.Domain.Sources.Files;
 
     public class LocalFileSystemBackupSource : IBackupFiles
     {

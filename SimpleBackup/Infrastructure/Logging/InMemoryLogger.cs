@@ -3,7 +3,7 @@ namespace SimpleBackup.Infrastructure.Logging
     using System.Collections.Generic;
     using System.IO;
 
-    using SimpleBackup.Domain.Interfaces;
+    using SimpleBackup.Domain.Logging;
 
     public class InMemoryLogger : ILogger
     {

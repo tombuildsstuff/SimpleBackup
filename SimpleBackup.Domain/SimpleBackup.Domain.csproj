@@ -35,24 +35,28 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BackupDetails.cs" />
-    <Compile Include="BackupEngine.cs" />
-    <Compile Include="ConsoleLogger.cs" />
-    <Compile Include="Databases\DatabasesBackupSource.cs" />
-    <Compile Include="Databases\IHandleDatabaseRestores.cs" />
-    <Compile Include="Databases\IProvideDatabaseBackups.cs" />
-    <Compile Include="Files\FilesBackupSource.cs" />
-    <Compile Include="Files\IBackupFiles.cs" />
-    <Compile Include="Files\IHandleRestoringFiles.cs" />
-    <Compile Include="MultiLogger.cs" />
-    <Compile Include="Email\EmailNotifier.cs" />
-    <Compile Include="Email\Settings\EmailSettings.cs" />
-    <Compile Include="Email\Settings\IEmailSettings.cs" />
-    <Compile Include="Interfaces\IBackupSource.cs" />
-    <Compile Include="Interfaces\ICompressData.cs" />
-    <Compile Include="Interfaces\ILogger.cs" />
-    <Compile Include="Interfaces\IGetNotifiedWhenABackupIsCompleted.cs" />
-    <Compile Include="Interfaces\ISettingsProvider.cs" />
-    <Compile Include="Interfaces\IStorageSource.cs" />
+    <Compile Include="Engine\BackupEngine.cs" />
+    <Compile Include="Engine\IBackupEngine.cs" />
+    <Compile Include="Engine\Settings\BackupEngineSettings.cs" />
+    <Compile Include="Engine\Settings\IBackupEngineSettings.cs" />
+    <Compile Include="Logging\ConsoleLogger.cs" />
+    <Compile Include="Notifiers\Email\Providers\ISmtpProvider.cs" />
+    <Compile Include="Notifiers\Email\Providers\SmtpProvider.cs" />
+    <Compile Include="Sources\Databases\DatabasesBackupSource.cs" />
+    <Compile Include="Sources\Databases\IHandleDatabaseRestores.cs" />
+    <Compile Include="Sources\Databases\IProvideDatabaseBackups.cs" />
+    <Compile Include="Sources\Files\FilesBackupSource.cs" />
+    <Compile Include="Sources\Files\IBackupFiles.cs" />
+    <Compile Include="Sources\Files\IHandleRestoringFiles.cs" />
+    <Compile Include="Logging\MultiLogger.cs" />
+    <Compile Include="Notifiers\Email\EmailNotifier.cs" />
+    <Compile Include="Notifiers\Email\Settings\EmailSettings.cs" />
+    <Compile Include="Notifiers\Email\Settings\IEmailSettings.cs" />
+    <Compile Include="Sources\IBackupSource.cs" />
+    <Compile Include="Compression\ICompressData.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Notifiers\IGetNotifiedWhenABackupIsCompleted.cs" />
+    <Compile Include="Storage\IStorageSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

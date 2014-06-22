@@ -42,7 +42,6 @@
     </Compile>
     <Compile Include="Infrastructure\Runner\ConsoleBackupRunner.cs" />
     <Compile Include="Infrastructure\Runner\IConsoleBackupRunner.cs" />
-    <Compile Include="Infrastructure\Settings\ConfigurationBasedSettingsProvider.cs" />
     <Compile Include="Infrastructure\DI\CastleConfiguration.cs" />
     <Compile Include="Infrastructure\Logging\InMemoryLogger.cs" />
     <Compile Include="Program.cs" />

@@ -4,7 +4,8 @@
     using System.IO;
 
     using SimpleBackup.Compressors.SevenZip.Settings;
-    using SimpleBackup.Domain.Interfaces;
+    using SimpleBackup.Domain.Compression;
+    using SimpleBackup.Domain.Logging;
 
     public class SevenZipDataCompressor : ICompressData
 	{
@@ -34,9 +35,9 @@
 				_logger.Information("File does not exist - continuing");
 			}
 
-			_logger.Information(string.Format("Launching 7Zip with the command: '{0} {1}'", _settings.SevenZipFileName, arguments));
+			_logger.Information(string.Format("Launching 7Zip with the command: '{0} {1}'", _settings.SevenZipFilePath, arguments));
 
-            var process = new Process { StartInfo = new ProcessStartInfo(_settings.SevenZipFileName, arguments) };
+            var process = new Process { StartInfo = new ProcessStartInfo(_settings.SevenZipFilePath, arguments) };
 			process.Start();
 			process.WaitForExit();
 

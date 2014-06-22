@@ -2,8 +2,6 @@
 {
     public interface ISevenZipSettings
     {
-        string InstallationDirectory { get; }
-
-        string SevenZipFileName { get; }
+        string SevenZipFilePath { get; }
     }
 }

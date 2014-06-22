@@ -1,22 +1,14 @@
 ﻿namespace SimpleBackup.Compressors.SevenZip.Settings
 {
-    using System.IO;
+    using System.Configuration;
 
     public class SevenZipSettings : ISevenZipSettings
     {
-        public string InstallationDirectory
+        public string SevenZipFilePath
         {
             get
             {
-                return null;
-            }
-        }
-
-        public string SevenZipFileName
-        {
-            get
-            {
-                return Path.Combine(InstallationDirectory, "7z.exe");
+                return ConfigurationManager.AppSettings["SevenZip.FilePath"];
             }
         }
     }

@@ -1,9 +1,5 @@
 ﻿namespace SimpleBackup.Infrastructure.DI
 {
-    using System.Configuration;
-    using System.Net;
-    using System.Net.Mail;
-
     using Castle.MicroKernel;
     using Castle.MicroKernel.Registration;
     using Castle.MicroKernel.Resolvers.SpecializedResolvers;
@@ -12,17 +8,24 @@
     using SimpleBackup.BackupSources.SqlServer;
     using SimpleBackup.Compressors.SevenZip;
     using SimpleBackup.Compressors.SevenZip.Settings;
-    using SimpleBackup.Domain;
-    using SimpleBackup.Domain.Databases;
-    using SimpleBackup.Domain.Email;
-    using SimpleBackup.Domain.Email.Settings;
-    using SimpleBackup.Domain.Files;
-    using SimpleBackup.Domain.Interfaces;
+    using SimpleBackup.Domain.Compression;
+    using SimpleBackup.Domain.Engine;
+    using SimpleBackup.Domain.Engine.Settings;
+    using SimpleBackup.Domain.Logging;
+    using SimpleBackup.Domain.Notifiers;
+    using SimpleBackup.Domain.Notifiers.Email;
+    using SimpleBackup.Domain.Notifiers.Email.Providers;
+    using SimpleBackup.Domain.Notifiers.Email.Settings;
+    using SimpleBackup.Domain.Sources;
+    using SimpleBackup.Domain.Sources.Databases;
+    using SimpleBackup.Domain.Sources.Files;
+    using SimpleBackup.Domain.Storage;
     using SimpleBackup.Infrastructure.Logging;
     using SimpleBackup.Infrastructure.Runner;
-    using SimpleBackup.Infrastructure.Settings;
     using SimpleBackup.StorageSources.LocalFileSystem;
+    using SimpleBackup.StorageSources.LocalFileSystem.Settings;
     using SimpleBackup.StorageSources.S3;
+    using SimpleBackup.StorageSources.S3.Settings;
 
     public class CastleConfiguration
     {
@@ -34,18 +37,19 @@
             RegisterBackupSources(kernel);
             RegisterCore(kernel);
             RegisterDatabaseProviders(kernel);
+            RegisterEmail(kernel);
             RegisterLoggers(kernel);
             RegisterSevenZip(kernel);
+            RegisterStorageSources(kernel);
             RegisterUserDataProviders(kernel);
-
-            RegisterLegacyJunk(kernel);
 
             return kernel;
         }
 
         private static void RegisterCore(IKernel kernel)
         {
-            kernel.Register(Component.For<BackupEngine>().ImplementedBy<BackupEngine>());
+            kernel.Register(Component.For<IBackupEngine>().ImplementedBy<BackupEngine>());
+            kernel.Register(Component.For<IBackupEngineSettings>().ImplementedBy<BackupEngineSettings>().LifestyleTransient());
             kernel.Register(Component.For<IConsoleBackupRunner>().ImplementedBy<ConsoleBackupRunner>().LifestyleTransient());
         }
 
@@ -55,20 +59,11 @@
             kernel.Register(Component.For<IBackupSource>().ImplementedBy<FilesBackupSource>().LifestyleTransient());
         }
 
-        private static void RegisterLegacyJunk(IKernel kernel)
+        private static void RegisterEmail(IKernel kernel)
         {
-            // Legacy to clean..
             kernel.Register(Component.For<IEmailSettings>().ImplementedBy<EmailSettings>().LifestyleTransient());
-            kernel.Register(Component.For<SmtpClient>().Instance(GetSmtpClient()).LifestyleTransient());
-
-            kernel.Register(Component.For<IStorageSource>().ImplementedBy<S3StorageSource>().LifestyleTransient());
-            kernel.Register(Component.For<IStorageSource>().ImplementedBy<LocalFileSystemStorageSource>().LifestyleTransient());
+            kernel.Register(Component.For<ISmtpProvider>().ImplementedBy<SmtpProvider>().LifestyleTransient());
             kernel.Register(Component.For<IGetNotifiedWhenABackupIsCompleted>().ImplementedBy<EmailNotifier>().LifestyleTransient());
-
-            kernel.Register(Component.For<ISettingsProvider>().ImplementedBy<ConfigurationBasedSettingsProvider>().LifestyleTransient());
-            var settings = kernel.Resolve<ISettingsProvider>();
-            kernel.Register(Component.For<LocalStorageSourceSettings>().Instance(ConfigureLocalProvider(settings)));
-            kernel.Register(Component.For<CloudStorageSourceSettings>().Instance(ConfigureS3Provider(settings)));
         }
 
         private static void RegisterLoggers(IKernel kernel)
@@ -90,41 +85,18 @@
             kernel.Register(Component.For<ISevenZipSettings>().ImplementedBy<SevenZipSettings>().LifestyleTransient());
         }
 
+        private static void RegisterStorageSources(IKernel kernel)
+        {
+            kernel.Register(Component.For<ILocalStorageSettings>().ImplementedBy<LocalStorageSettings>().LifestyleTransient());
+            kernel.Register(Component.For<IStorageSource>().ImplementedBy<LocalFileSystemStorageSource>().LifestyleTransient());
+
+            kernel.Register(Component.For<IAmazonStorageSettings>().ImplementedBy<AmazonStorageSettings>().LifestyleTransient());
+            kernel.Register(Component.For<IStorageSource>().ImplementedBy<AmazonS3StorageSource>().LifestyleTransient());
+        }
+
         private static void RegisterUserDataProviders(IKernel kernel)
         {
             kernel.Register(Component.For<IBackupFiles>().ImplementedBy<LocalFileSystemBackupSource>());
-        }
-
-        private static SmtpClient GetSmtpClient()
-        {
-            var client = new SmtpClient(ConfigurationManager.AppSettings["SmtpServer"], int.Parse(ConfigurationManager.AppSettings["SmtpPort"]));
-            client.UseDefaultCredentials = bool.Parse(ConfigurationManager.AppSettings["SmtpUseDefaultCredentials"]);
-            client.EnableSsl = bool.Parse(ConfigurationManager.AppSettings["SmtpUseSsl"]);
-
-            if (!client.UseDefaultCredentials)
-            {
-                var credentials = new NetworkCredential(ConfigurationManager.AppSettings["SmtpSenderEmailAddress"], ConfigurationManager.AppSettings["SmtpSenderPassword"]);
-                client.Credentials = credentials;
-            }
-
-            return client;
-        }
-
-        private static LocalStorageSourceSettings ConfigureLocalProvider(ISettingsProvider settings)
-        {
-            var directory = settings.Get(ISettingsProvider.SettingsType.LocalBackupDirectory);
-            var localBackupsToKeep = int.Parse(settings.Get(ISettingsProvider.SettingsType.LocalBackupsToKeep));
-            return new LocalStorageSourceSettings(directory, localBackupsToKeep);
-        }
-
-        private static CloudStorageSourceSettings ConfigureS3Provider(ISettingsProvider settings)
-        {
-            var bucket = settings.Get(ISettingsProvider.SettingsType.S3Bucket);
-            var accessKey = settings.Get(ISettingsProvider.SettingsType.S3AccessKey);
-            var secretAccessKey = settings.Get(ISettingsProvider.SettingsType.S3SecretAccessKey);
-            var prefix = settings.Get(ISettingsProvider.SettingsType.S3Prefix);
-            var remoteBackupsToKeep = int.Parse(settings.Get(ISettingsProvider.SettingsType.RemoteBackupsToKeep));
-            return new CloudStorageSourceSettings(bucket, accessKey, secretAccessKey, prefix, remoteBackupsToKeep);
         }
     }
 }

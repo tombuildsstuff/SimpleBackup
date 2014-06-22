@@ -1,0 +1,67 @@
+﻿namespace SimpleBackup.Domain.Notifiers.Email
+{
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Net.Mail;
+    using System.Text;
+
+    using SimpleBackup.Domain.Logging;
+    using SimpleBackup.Domain.Notifiers.Email.Providers;
+    using SimpleBackup.Domain.Notifiers.Email.Settings;
+
+    public class EmailNotifier : IGetNotifiedWhenABackupIsCompleted
+	{
+        private readonly IEmailSettings _settings;
+        private readonly ISmtpProvider _smtpProvider;
+		private readonly ILogger _logger;
+
+		public EmailNotifier(IEmailSettings settings, ISmtpProvider smtpProvider, ILogger logger)
+		{
+		    _settings = settings;
+		    _smtpProvider = smtpProvider;
+			_logger = logger;
+		}
+
+		public string Name
+		{
+			get
+			{
+				return "Email";
+			}
+		}
+
+		public bool Send(string file, bool successful)
+		{
+			try
+			{
+				var lines = File.ReadAllLines(file).ToList();
+				
+				var numberOfErrors = lines.Count(l => l.Contains("ERROR"));
+				var numberOfWarnings = lines.Count(l => l.Contains("WARN"));
+                var subject = numberOfErrors > 0 || numberOfWarnings > 0 || !successful ? _settings.FailureSubject : _settings.SuccessfulSubject;
+
+				var outcome = new StringBuilder(string.Format("Backup Report for {0} at {1} ({2} errors & {3} warnings)",
+												DateTime.Now.ToLongDateString(),
+												DateTime.Now.ToShortTimeString(),
+												numberOfErrors,
+												numberOfWarnings));
+				outcome.Append("\n\n");
+				foreach (var line in lines)
+					outcome.AppendLine(line);
+
+                var from = string.IsNullOrWhiteSpace(_settings.FromAlias) ? _settings.FromAddress : string.Format("{0} <{1}>", _settings.FromAlias, _settings.FromAddress);
+			    var to = string.Join(";", _settings.ToAddresses);
+			    var client = _smtpProvider.Get();
+                client.Send(new MailMessage(from, to, subject, outcome.ToString()));
+				return true;
+			}
+			catch (Exception ex)
+			{
+				_logger.Error(ex.Message);
+				_logger.Error(ex.StackTrace);
+				return false;
+			}
+		}
+	}
+}
