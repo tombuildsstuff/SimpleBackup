@@ -1,4 +1,4 @@
-namespace SimpleBackup
+namespace SimpleBackup.Infrastructure.Logging
 {
     using System.Collections.Generic;
     using System.IO;

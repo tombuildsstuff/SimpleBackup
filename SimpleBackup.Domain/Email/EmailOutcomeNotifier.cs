@@ -10,14 +10,15 @@
 
     public class EmailOutcomeNotifier : IOutcomeNotifier
 	{
-		private readonly EmailConfiguration _configuration;
-		private readonly SmtpClient _smtpClient;
+        private readonly IEmailSettings _settings;
+
+        private readonly SmtpClient _smtpClient;
 		private readonly ILogger _logger;
 
-		public EmailOutcomeNotifier(EmailConfiguration configuration, SmtpClient smtpClient, ILogger logger)
+		public EmailOutcomeNotifier(IEmailSettings settings, SmtpClient smtpClient, ILogger logger)
 		{
-			_configuration = configuration;
-			_smtpClient = smtpClient;
+		    _settings = settings;
+		    _smtpClient = smtpClient;
 			_logger = logger;
 		}
 
@@ -35,9 +36,9 @@
 			{
 				var lines = File.ReadAllLines(file).ToList();
 				
-				var numberOfErrors = lines.Count(l => l.StartsWith("ERROR"));
-				var numberOfWarnings = lines.Count(l => l.StartsWith("WARN"));
-                var subject = numberOfErrors > 0 || numberOfWarnings > 0 ? _configuration.FailureSubject : _configuration.SuccessfulSubject;
+				var numberOfErrors = lines.Count(l => l.Contains("ERROR"));
+				var numberOfWarnings = lines.Count(l => l.Contains("WARN"));
+                var subject = numberOfErrors > 0 || numberOfWarnings > 0 ? _settings.FailureSubject : _settings.SuccessfulSubject;
 
 				var outcome = new StringBuilder(string.Format("Backup Report for {0} at {1} ({2} errors & {3} warnings)",
 												DateTime.Now.ToLongDateString(),
@@ -48,7 +49,9 @@
 				foreach (var line in lines)
 					outcome.AppendLine(line);
 
-                _smtpClient.Send(new MailMessage(_configuration.From, _configuration.To, subject, outcome.ToString()));
+                var from = string.IsNullOrWhiteSpace(_settings.FromAlias) ? _settings.FromAddress : string.Format("{0} <{1}>", _settings.FromAlias, _settings.FromAddress);
+			    var to = string.Join(";", _settings.ToAddresses);
+                _smtpClient.Send(new MailMessage(from, to, subject, outcome.ToString()));
 				return true;
 			}
 			catch (Exception ex)

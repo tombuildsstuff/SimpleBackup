@@ -6,9 +6,9 @@
 
     public class DatabaseBackupSource : IBackupSource
     {
-        private readonly IEnumerable<IDatabaseEngine> _databaseEngines;
+        private readonly IEnumerable<IProvideDatabaseBackups> _databaseEngines;
 
-        public DatabaseBackupSource(IEnumerable<IDatabaseEngine> databaseEngines)
+        public DatabaseBackupSource(IEnumerable<IProvideDatabaseBackups> databaseEngines)
         {
             _databaseEngines = databaseEngines;
         }
@@ -17,8 +17,7 @@
         {
             foreach (var engine in _databaseEngines)
             {
-                var databases = engine.GetDatabaseNames();
-                foreach (var db in databases)
+                foreach (var db in engine.DatabaseNames)
                     engine.BackupDatabaseToFile(db, string.Format("{0}\\backup-{1}.bak", directory, db));
             }
         }

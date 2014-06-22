@@ -38,10 +38,12 @@
     <Compile Include="BackupEngine.cs" />
     <Compile Include="ConsoleLogger.cs" />
     <Compile Include="Databases\DatabaseBackupSource.cs" />
-    <Compile Include="Databases\IDatabaseEngine.cs" />
-    <Compile Include="DualLogger.cs" />
-    <Compile Include="Email\EmailConfiguration.cs" />
+    <Compile Include="Databases\IHandleDatabaseRestores.cs" />
+    <Compile Include="Databases\IProvideDatabaseBackups.cs" />
+    <Compile Include="MultiLogger.cs" />
     <Compile Include="Email\EmailOutcomeNotifier.cs" />
+    <Compile Include="Email\EmailSettings.cs" />
+    <Compile Include="Email\IEmailSettings.cs" />
     <Compile Include="Interfaces\IBackupSource.cs" />
     <Compile Include="Interfaces\IDataCompressor.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
@@ -56,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>

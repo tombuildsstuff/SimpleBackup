@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
   </ItemGroup>
@@ -39,8 +40,13 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="SqlServerDatabaseEngine.cs" />
+    <Compile Include="Constants\Names.cs" />
+    <Compile Include="Settings\ISqlServerSettings.cs" />
+    <Compile Include="Settings\SqlServerAuthType.cs" />
+    <Compile Include="Settings\SqlServerSettings.cs" />
+    <Compile Include="SqlServerBackupSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServerRestoreSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimpleBackup.Domain\SimpleBackup.Domain.csproj">

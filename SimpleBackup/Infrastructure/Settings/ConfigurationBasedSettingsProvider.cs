@@ -1,4 +1,4 @@
-﻿namespace SimpleBackup
+﻿namespace SimpleBackup.Infrastructure.Settings
 {
     using System.Configuration;
 

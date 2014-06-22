@@ -40,8 +40,11 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ConfigurationBasedSettingsProvider.cs" />
-    <Compile Include="InMemoryLogger.cs" />
+    <Compile Include="Infrastructure\Runner\ConsoleBackupRunner.cs" />
+    <Compile Include="Infrastructure\Runner\IConsoleBackupRunner.cs" />
+    <Compile Include="Infrastructure\Settings\ConfigurationBasedSettingsProvider.cs" />
+    <Compile Include="Infrastructure\DI\CastleConfiguration.cs" />
+    <Compile Include="Infrastructure\Logging\InMemoryLogger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
