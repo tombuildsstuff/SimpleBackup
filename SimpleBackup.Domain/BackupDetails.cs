@@ -12,8 +12,7 @@
 
 		public string GenerateFileName()
 		{
-			return string.Format("{0}-{1}_{2}_{3}-{4}_{5}_{6}.{7}", Name, BackupDate.Year, BackupDate.Month, BackupDate.Day,
-			                     BackupDate.Hour, BackupDate.Minute, BackupDate.Second, Extension);
+			return string.Format("{0}-{1}_{2}_{3}-{4}_{5}_{6}.{7}", Name, BackupDate.Year, BackupDate.Month, BackupDate.Day, BackupDate.Hour, BackupDate.Minute, BackupDate.Second, Extension);
 		}
 
 		public static BackupDetails ParseFromBackupFile(string fileName)

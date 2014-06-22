@@ -38,10 +38,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ConfigurationBasedSettingsProvider.cs" />
-    <Compile Include="InMemoryLogger.cs" />
+    <Compile Include="Infrastructure\Runner\ConsoleBackupRunner.cs" />
+    <Compile Include="Infrastructure\Runner\IConsoleBackupRunner.cs" />
+    <Compile Include="Infrastructure\DI\CastleConfiguration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -63,17 +64,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SimpleBackup.BackupSources.LocalFileSystem\SimpleBackup.BackupSources.LocalFileSystem.csproj">
+      <Project>{15fe4102-9513-48b7-a3fc-3fcd36c56461}</Project>
+      <Name>SimpleBackup.BackupSources.LocalFileSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SimpleBackup.BackupSources.SqlServer\SimpleBackup.BackupSources.SqlServer.csproj">
-      <Project>{146E30EF-C766-4E50-B200-40A0732D6EF8}</Project>
+      <Project>{146e30ef-c766-4e50-b200-40a0732d6ef8}</Project>
       <Name>SimpleBackup.BackupSources.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimpleBackup.Compressors.SevenZip\SimpleBackup.Compressors.SevenZip.csproj">
       <Project>{6212A51D-0E03-4F19-A5B5-5D5355F2843B}</Project>
       <Name>SimpleBackup.Compressors.SevenZip</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SimpleBackup.Compressors.SharpZipLib\SimpleBackup.Compressors.SharpZipLib.csproj">
-      <Project>{8BF112E2-CBBB-481F-BBCD-E12FBD54C970}</Project>
-      <Name>SimpleBackup.Compressors.SharpZipLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimpleBackup.Domain\SimpleBackup.Domain.csproj">
       <Project>{427404F0-80BB-4934-89F7-2D3BE4197431}</Project>

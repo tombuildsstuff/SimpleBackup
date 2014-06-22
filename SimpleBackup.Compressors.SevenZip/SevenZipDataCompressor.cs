@@ -1,18 +1,21 @@
 ﻿namespace SimpleBackup.Compressors.SevenZip
 {
-	using System.IO;
-	using System.Diagnostics;
-	using SimpleBackup.Domain.Interfaces;
+    using System.Diagnostics;
+    using System.IO;
 
-	public class SevenZipDataCompressor : IDataCompressor
+    using SimpleBackup.Compressors.SevenZip.Settings;
+    using SimpleBackup.Domain.Compression;
+    using SimpleBackup.Domain.Logging;
+
+    public class SevenZipDataCompressor : ICompressData
 	{
-		private readonly SevenZipConfiguration _configuration;
-		private readonly ILogger _logger;
+        private readonly ISevenZipSettings _settings;
+        private readonly ILogger _logger;
 
-		public SevenZipDataCompressor(SevenZipConfiguration configuration, ILogger logger)
+        public SevenZipDataCompressor(ISevenZipSettings settings, ILogger logger)
 		{
-			_configuration = configuration;
-			_logger = logger;
+            _settings = settings;
+            _logger = logger;
 		}
 
 		public void CompressDataInToFile(string directory, string password, string outputFile)
@@ -32,9 +35,9 @@
 				_logger.Information("File does not exist - continuing");
 			}
 
-			_logger.Information(string.Format("Launching 7Zip with the command: '{0} {1}'", _configuration.SevenZipFileName, arguments));
-			
-			var process = new Process { StartInfo = new ProcessStartInfo(_configuration.SevenZipFileName, arguments) };
+			_logger.Information(string.Format("Launching 7Zip with the command: '{0} {1}'", _settings.SevenZipFilePath, arguments));
+
+            var process = new Process { StartInfo = new ProcessStartInfo(_settings.SevenZipFilePath, arguments) };
 			process.Start();
 			process.WaitForExit();
 
