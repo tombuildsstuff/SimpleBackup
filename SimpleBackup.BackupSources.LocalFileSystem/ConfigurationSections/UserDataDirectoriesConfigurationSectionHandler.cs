@@ -11,7 +11,7 @@
     {
         public object Create(object parent, object configContext, XmlNode section)
         {
-            var document = XDocument.Parse(section.SelectSingleNode("//userDefinedDirectories").OuterXml);
+            var document = XDocument.Parse(section.SelectSingleNode("//userDataDirectories").OuterXml);
             var children = document.Descendants("DirectoryConfiguration");
             var directories = children.Select(c => new UserDataDirectory(c.Element("FriendlyName").Value, c.Element("Path").Value)).ToList();
             return new UserDataDirectoriesConfiguration { Directories = directories.ToArray() };

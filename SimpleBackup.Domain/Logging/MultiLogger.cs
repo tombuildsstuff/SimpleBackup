@@ -28,11 +28,6 @@
             _loggers.ToList().ForEach(l => l.Information(FormatMessage(message)));
 		}
 
-		public void ExportToFile(string file)
-        {
-            _loggers.ToList().ForEach(l => l.ExportToFile(file));
-		}
-
 		private static string FormatMessage(string message)
 		{
 			return string.Format("{0}: {1}", DateTime.Now.ToShortTimeString(), message);

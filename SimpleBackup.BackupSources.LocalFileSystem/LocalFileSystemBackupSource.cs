@@ -37,6 +37,9 @@
                 try
                 {
                     var directoryPath = string.Concat(directory, Path.DirectorySeparatorChar.ToString(), directoryToBackup.FriendlyName, Path.DirectorySeparatorChar.ToString());
+                    if (!Directory.Exists(directoryPath))
+                        Directory.CreateDirectory(directoryPath);
+
                     var childDirectories = Directory.EnumerateDirectories(directoryToBackup.Path, "*", SearchOption.AllDirectories);
                     foreach (var childDirectory in childDirectories)
                         Directory.CreateDirectory(childDirectory.Replace(directoryToBackup.Path, directoryPath));

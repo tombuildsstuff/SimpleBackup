@@ -7,7 +7,5 @@ namespace SimpleBackup.Domain.Logging
         void Warning(string message);
         
         void Information(string message);
-
-        void ExportToFile(string file);
     }
 }

@@ -50,20 +50,11 @@
                 _logger.Error(ex.StackTrace);
             }
 
-            var logFileName = string.Format("Log-{0}_{1}_{2}-{3}_{4}_{5}.log",
-                DateTime.Now.Year,
-                DateTime.Now.Month,
-                DateTime.Now.Day,
-                DateTime.Now.Hour,
-                DateTime.Now.Minute,
-                DateTime.Now.Second);
-            _logger.ExportToFile(logFileName);
-
             foreach (var outcomeNotifier in _notifySources)
             {
-                Console.WriteLine("Sending log via {0}", outcomeNotifier.Name);
-                var outcome = outcomeNotifier.Send(logFileName, successful);
-                Console.WriteLine("Sending {0}", outcome ? "Successful" : "Failed");
+                _logger.Information(string.Format("Sending log via {0}", outcomeNotifier.Name));
+                var outcome = outcomeNotifier.Send(successful);
+                _logger.Information(string.Format("Sending {0}", outcome ? "Successful" : "Failed"));
             }
         }
     }

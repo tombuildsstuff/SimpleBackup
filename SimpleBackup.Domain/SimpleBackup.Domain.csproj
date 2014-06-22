@@ -40,6 +40,9 @@
     <Compile Include="Engine\Settings\BackupEngineSettings.cs" />
     <Compile Include="Engine\Settings\IBackupEngineSettings.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
+    <Compile Include="Logging\File\FileLogger.cs" />
+    <Compile Include="Logging\File\FileLoggerSettings.cs" />
+    <Compile Include="Logging\File\IFileLoggerSettings.cs" />
     <Compile Include="Notifiers\Email\Providers\ISmtpProvider.cs" />
     <Compile Include="Notifiers\Email\Providers\SmtpProvider.cs" />
     <Compile Include="Sources\Databases\DatabasesBackupSource.cs" />

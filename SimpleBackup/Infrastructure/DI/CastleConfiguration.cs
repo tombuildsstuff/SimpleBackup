@@ -5,13 +5,16 @@
     using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 
     using SimpleBackup.BackupSources.LocalFileSystem;
+    using SimpleBackup.BackupSources.LocalFileSystem.Settings;
     using SimpleBackup.BackupSources.SqlServer;
+    using SimpleBackup.BackupSources.SqlServer.Settings;
     using SimpleBackup.Compressors.SevenZip;
     using SimpleBackup.Compressors.SevenZip.Settings;
     using SimpleBackup.Domain.Compression;
     using SimpleBackup.Domain.Engine;
     using SimpleBackup.Domain.Engine.Settings;
     using SimpleBackup.Domain.Logging;
+    using SimpleBackup.Domain.Logging.File;
     using SimpleBackup.Domain.Notifiers;
     using SimpleBackup.Domain.Notifiers.Email;
     using SimpleBackup.Domain.Notifiers.Email.Providers;
@@ -20,7 +23,6 @@
     using SimpleBackup.Domain.Sources.Databases;
     using SimpleBackup.Domain.Sources.Files;
     using SimpleBackup.Domain.Storage;
-    using SimpleBackup.Infrastructure.Logging;
     using SimpleBackup.Infrastructure.Runner;
     using SimpleBackup.StorageSources.LocalFileSystem;
     using SimpleBackup.StorageSources.LocalFileSystem.Settings;
@@ -69,14 +71,15 @@
         private static void RegisterLoggers(IKernel kernel)
         {
             kernel.Register(Component.For<ILogger>().ImplementedBy<ConsoleLogger>().LifestyleTransient());
-            kernel.Register(Component.For<ILogger>().ImplementedBy<InMemoryLogger>().LifestyleTransient());
+            kernel.Register(Component.For<ILogger>().ImplementedBy<FileLogger>().LifestyleTransient());
             kernel.Register(Component.For<ILogger>().ImplementedBy<MultiLogger>().LifestyleTransient());
         }
 
         private static void RegisterDatabaseProviders(IKernel kernel)
         {
-            kernel.Register(Component.For<IProvideDatabaseBackups>().ImplementedBy<SqlServerBackupSource>());
-            kernel.Register(Component.For<IHandleDatabaseRestores>().ImplementedBy<SqlServerRestoreSource>());
+            kernel.Register(Component.For<ISqlServerSettings>().ImplementedBy<SqlServerSettings>().LifestyleTransient());
+            kernel.Register(Component.For<IProvideDatabaseBackups>().ImplementedBy<SqlServerBackupSource>().LifestyleTransient());
+            kernel.Register(Component.For<IHandleDatabaseRestores>().ImplementedBy<SqlServerRestoreSource>().LifestyleTransient());
         }
 
         private static void RegisterSevenZip(IKernel kernel)
@@ -96,7 +99,8 @@
 
         private static void RegisterUserDataProviders(IKernel kernel)
         {
-            kernel.Register(Component.For<IBackupFiles>().ImplementedBy<LocalFileSystemBackupSource>());
+            kernel.Register(Component.For<IBackupFiles>().ImplementedBy<LocalFileSystemBackupSource>().LifestyleTransient());
+            kernel.Register(Component.For<IUserDataSettings>().ImplementedBy<UserDataSettings>().LifestyleTransient());
         }
     }
 }

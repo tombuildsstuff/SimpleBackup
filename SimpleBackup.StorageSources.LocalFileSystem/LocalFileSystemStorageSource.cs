@@ -20,6 +20,9 @@
 
         public void ArchiveBackup(BackupDetails details, string fileName)
         {
+            if (!Directory.Exists(_settings.BackupDirectory))
+                Directory.CreateDirectory(_settings.BackupDirectory);
+
             var path = Path.Combine(_settings.BackupDirectory, details.GenerateFileName());
 			File.Copy(fileName, path, true);
         }

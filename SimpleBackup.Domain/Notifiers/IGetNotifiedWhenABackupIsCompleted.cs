@@ -4,6 +4,6 @@
 	{
 		string Name { get; }
 
-		bool Send(string file, bool successful);
+		bool Send(bool successful);
 	}
 }
